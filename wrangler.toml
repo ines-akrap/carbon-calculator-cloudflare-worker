@@ -1,0 +1,3 @@
+name = "carbon-calculator"
+workers_dev = true
+main= "./index.js"
