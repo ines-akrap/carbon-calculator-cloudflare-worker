@@ -1,3 +1,4 @@
 name = "carbon-calculator"
 workers_dev = true
 main= "./index.js"
+compatibility_date = "2023-08-17"
