@@ -8,16 +8,17 @@ router.get("/", () => {
   return new Response("Hello, world! This is your carbon calculator.")
 });
 
-router.get("/co2/:bytes/:model/:country", ({params}) => {
+router.get("/co2/:bytes/:model/:country/:greenHosting", ({params}) => {
   console.log(params);
-  const { bytes, model, country } = params;
+  const { bytes, model, country, greenHosting } = params;
 
   const emissions = new co2(model);
   const result = emissions.perByte(bytes);
 
   return new Response(JSON.stringify({model,result}), {
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
     }
   });
 });
