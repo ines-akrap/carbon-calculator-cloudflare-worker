@@ -5,16 +5,17 @@ import { co2 } from '@tgwf/co2';
 const router = Router();
 
 router.get("/", () => {
-  return new Response("Hello, world! This is the root page of your Worker template.")
+  return new Response("Hello, world! This is your carbon calculator.")
 });
 
-router.get("/bytes/:value", ({params}) => {
-  const { value } = params
+router.get("/co2/:bytes/:model/:country", ({params}) => {
+  console.log(params);
+  const { bytes, model, country } = params;
 
-  const emissions = new co2();
-  const result = emissions.perByte(value);
+  const emissions = new co2(model);
+  const result = emissions.perByte(bytes);
 
-  return new Response(JSON.stringify({result}), {
+  return new Response(JSON.stringify({model,result}), {
     headers: {
       "Content-Type": "application/json"
     }
