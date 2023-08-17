@@ -8,11 +8,10 @@ router.get("/", () => {
   return new Response("Hello, world! This is your carbon calculator.")
 });
 
-router.get("/co2/:bytes/:model/:country/:greenHosting", ({params}) => {
-  console.log(params);
-  const { bytes, model, country, greenHosting } = params;
+router.get("/co2/:bytes/:model/:country", ({params}) => {
+  const { bytes, model, country } = params;
 
-  const emissions = new co2(model);
+  const emissions = new co2({ model: model });
   const result = emissions.perByte(bytes);
 
   return new Response(JSON.stringify({model,result}), {
