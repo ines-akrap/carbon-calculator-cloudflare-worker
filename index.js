@@ -1,20 +1,27 @@
 import { Router } from 'itty-router';
 import { co2 } from '@tgwf/co2';
 
-// Create a new router
 const router = Router();
 
 router.get("/", () => {
-  return new Response("Hello, world! This is your carbon calculator.")
+  return new Response("Welcome to Carbon Calculator ...");
 });
 
-router.get("/co2/:bytes/:model/:country", ({params}) => {
-  const { bytes, model, country } = params;
+router.get("/co2/:kb/:model/:country", ({params}) => {
+  const { kb, model, country } = params;
+  
+  const bytes = kb * 1000;
+  const greenHost = false;
+  const options = {
+    gridIntensity: {
+      device: { country: `${country}` },
+    },
+  };
 
-  const emissions = new co2({ model: model });
-  const result = emissions.perByte(bytes);
+  const co2Emission = new co2({ model: `${model}`, results: "segment"});
+  estimatedCO2 = co2Emission.perVisitTrace(bytes, greenHost);
 
-  return new Response(JSON.stringify({model,result}), {
+  return new Response(JSON.stringify({ model, estimatedCO2 }), {
     headers: {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
@@ -22,7 +29,7 @@ router.get("/co2/:bytes/:model/:country", ({params}) => {
   });
 });
 
-router.all("*", () => new Response("404, not found!", { status: 404 }));
+router.all("*", () => new Response("Bad request", { status: 404 }));
 
 addEventListener('fetch', (e) => {
   e.respondWith(router.handle(e.request))
